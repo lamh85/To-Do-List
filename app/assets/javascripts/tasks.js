@@ -14,32 +14,40 @@ $( document ).ready(function() {
         console.log("Got JSON file!");
         jsonData = data;
 
-        tableHtml = "<table><tr> <th>Title</th> <th>Note</th> <th>Due Date</th> <th>Time Left (seconds)</th> <th>Status</th> <tr>";
+        var refreshTable = function(){
 
-        for (x=0; x<jsonData.length; x++) {
-          tableHtml += "<tr>";
-          tableHtml += "<td>" +jsonData[x].title+ "</td>";
-          tableHtml += "<td>" +jsonData[x].note+ "</td>";
-          tableHtml += "<td>" +jsonData[x].due+ "</td>";
+          tableHtml = "<table><tr> <th>Title</th> <th>Note</th> <th>Due Date</th> <th>Time Left (seconds)</th> <th>Status</th> <tr>";
 
-          dueSeconds = jsonData[x].due_seconds - (new Date().getTime()/1000);
+          for (x=0; x<jsonData.length; x++) {
+            tableHtml += "<tr>";
+            tableHtml += "<td>" +jsonData[x].title+ "</td>";
+            tableHtml += "<td>" +jsonData[x].note+ "</td>";
+            tableHtml += "<td>" +jsonData[x].due+ "</td>";
 
-          tableHtml += "<td>" +dueSeconds+ "</td>";
+            dueSeconds = jsonData[x].due_seconds - (new Date().getTime()/1000);
 
-          if (dueSeconds > 0) {
-            tableHtml += "<td class='due'>Due</td>"
-          } else {
-            tableHtml += "<td class='past-due'>Past Due</td>"
+            tableHtml += "<td>" +dueSeconds+ "</td>";
+
+            if (dueSeconds > 0) {
+              tableHtml += "<td class='due'>Due</td>"
+            } else {
+              tableHtml += "<td class='past-due'>Past Due</td>"
+            }
+
+            tableHtml += "</tr>";
           }
 
-          tableHtml += "</tr>";
+          tableHtml += "</table>";
 
+          $('#results').html(tableHtml);
 
-        }
+          console.log("function fired!");
 
-        tableHtml += "</table>";
+        }; // Function to refresh the table
 
-        $('#results').html(tableHtml);
+        refreshTable(); // Fire the function for the first time
+
+        setInterval(refreshTable, 1000); // Repeat the function every 1 second
         
       }
     });
